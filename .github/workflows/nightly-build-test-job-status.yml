@@ -1,0 +1,85 @@
+name: Nightly Build Test Output Job Status
+
+on:
+  schedule:
+    - cron: '0 17 * * *'
+  workflow_dispatch:
+    
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  scala-build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up JDK8
+      uses: ./.github/actions/jdk-setup-action
+    outputs:
+      job-status: ${{ job.status }}
+
+
+
+
+  docker-build-bigdl:
+    needs: scala-build
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: docker login
+      run: |
+        docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}
+    outputs:
+      job-status: ${{ job.status }}
+
+
+  
+  docker-build-ppml:
+    needs: scala-build
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    outputs:
+      job-status: ${{ job.status }}
+
+  
+  docker-build-kms:
+    needs: scala-build
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    outputs:
+      job-status: ${{ job.status }}
+
+
+
+  python-build-sourceforge:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK8
+      uses: ./.github/actions/jdk-setup-action
+    - name: Set up maven
+      uses: ./.github/actions/maven-setup-action
+    - name: Set up Python 
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.7'
+    outputs:
+      job-status: ${{ job.status }}
+      
+  check-job-statuses: 
+    runs-on: ubuntu-latest
+#     needs: [scala-build, docker-build-bigdl, docker-build-ppml, docker-build-kms, python-build-sourceforge]
+    steps:
+    - name: check status
+      run: |
+        if [["${{ needs.scala-build.outputs.job-status }}" == "Success" && "${{ needs.docker-build-bigdl.outputs.job.status }} == "Success"]]; then
+        echo success!!!!!!!!!!!
+        fi
