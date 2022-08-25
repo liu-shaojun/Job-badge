@@ -22,7 +22,7 @@ runs:
     - name: get job status
       shell: bash
       run: |
-        echo "JOB-STATUS = ${{ job.status }}" >>$GITHUB_ENV
+        echo "JOB-STATUS=${{ job.status }}" >>$GITHUB_ENV
     
     - name: Create the Badge
       uses: schneegans/dynamic-badges-action@v1.4.0
