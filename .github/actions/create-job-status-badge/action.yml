@@ -1,5 +1,5 @@
 name: 'Create Job Status Badge'
-description: 'setup maven'
+description: 'In a workflow with multiple jobs, create a badge that can display the completion time and status of the job'
 inputs:
   secret:
     description: 'use to access gist'
