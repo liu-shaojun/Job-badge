@@ -1,41 +1,35 @@
-name: 'Setup Maven'
+name: 'Create Job Status Badge'
 description: 'setup maven'
-# inputs:
-#   arda_nexus:
-#     description: 'arda nexus secret'
-#     required: true
+inputs:
+  secret:
+    description: 'use to access gist'
+    required: true
+  gist-id:
+    description: 'gist-id'
+    required: true
+  file-name:
+    description: 'gist file name(.json)'
+    required: true
 runs:
   using: "composite"
   steps:
-    #pls use cache only on github owned runners 
-    # - uses: actions/cache@v2
-    #   with:
-    #     path: ~/.m2/repository
-    #     key: maven-${{ hashFiles('**/pom.xml') }}
-    #     restore-keys: maven-
+    - name: print time
+      run: |
+        export NOW=$( date '+%F_%H:%M:%S' )
+        echo "TIME=${NOW}" >> $GITHUB_ENV
+        
+    - name: get job status
+        run: |
+          echo "STATUS = ${{ job.status }}" >>$GITHUB_ENV
     
-    - name: Set up Maven
-      uses: stCarolas/setup-maven@v4.4
-      with:
-        maven-version: 3.8.2
-
-    - name: Set up Maven Settings
-      uses: s4u/maven-settings-action@v2.6.0
-      with:
-        sonatypeSnapshots: true
-        apacheSnapshots: true
-        servers: |
-          [
-            {
-              "id": "central",
-              "configuration": {
-                "httpConfiguration": {
-                  "all": {
-                    "connectionTimeout": "3600000",
-                    "readTimeout": "3600000"
-                  }    
-                }
-              }
-            }
-          ]
-        mirrors: '[{"id": "ardaNexus", "name": "ardaNexus", "mirrorOf": "*", "url": "${NEXUS_URL}" }]'
+    - name: Create the Badge
+        uses: schneegans/dynamic-badges-action@v1.4.0
+        with:
+          auth: ${{ inputs.secret }}
+          gistID: ${{ inputs.gist-id }}
+          filename: ${{ inputs.file-name }}
+          label: Time: ${{ env.TIME }}
+          message: ${{ env.STATUS }}
+          valColorRange: ${{ env.TIME }}
+          maxColorRange: 100
+          minColorRange: 0
