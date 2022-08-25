@@ -22,7 +22,7 @@ runs:
     - name: get job status
       shell: bash
       run: |
-        echo "STATUS = ${{ job.status }}" >>$GITHUB_ENV
+        echo "JOB-STATUS = ${{ job.status }}" >>$GITHUB_ENV
     
     - name: Create the Badge
       uses: schneegans/dynamic-badges-action@v1.4.0
@@ -31,7 +31,7 @@ runs:
         gistID: ${{ inputs.gist-id }}
         filename: ${{ inputs.file-name }}
         label: Time is ${{ env.TIME }}
-        message: ${{ env.STATUS }}
+        message: ${{ env.JOB-STATUS }}
         valColorRange: ${{ env.TIME }}
         maxColorRange: 100
         minColorRange: 0
