@@ -30,7 +30,7 @@ runs:
         auth: ${{ inputs.secret }}
         gistID: ${{ inputs.gist-id }}
         filename: ${{ inputs.file-name }}
-        label: Time: ${{ env.TIME }}
+        label: Time is ${{ env.TIME }}
         message: ${{ env.STATUS }}
         valColorRange: ${{ env.TIME }}
         maxColorRange: 100
