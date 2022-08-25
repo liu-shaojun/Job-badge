@@ -17,8 +17,18 @@ jobs:
     
     - name: Set up JDK8
       uses: ./.github/actions/jdk-setup-action
+      
+    - name: Create Job Badge
+      uses: ./.github/actions/create-job-status-badge
+      if: ${{ always() }}
+      with:
+        secret: ${{ secrets.GIST_SECRET }}
+        gist-id: 7495dccc42118020c12de5a095cfa2a6
+        file-name: nb-scala-build.json
     outputs:
       job-status: ${{ job.status }}
+    
+
 
 
 
