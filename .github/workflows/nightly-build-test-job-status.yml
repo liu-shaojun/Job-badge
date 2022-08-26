@@ -25,13 +25,6 @@ jobs:
         secret: ${{ secrets.GIST_SECRET }}
         gist-id: 7495dccc42118020c12de5a095cfa2a6
         file-name: nb-scala-build.json
-    outputs:
-      job-status: ${{ job.status }}
-    
-
-
-
-
 
   docker-build-bigdl:
     needs: scala-build
@@ -42,9 +35,15 @@ jobs:
     
     - name: docker login
       run: |
-        docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}
-    outputs:
-      job-status: ${{ job.status }}
+        docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}'
+      
+    - name: Create Job Badge
+      if: ${{ always() }}
+      uses: ./.github/actions/create-job-status-badge
+      with:
+        secret: ${{ secrets.GIST_SECRET }}
+        gist-id: aaee1abb17ed9aad37e19256787c52b2
+        file-name: nb-docker-build-bigdl.json
 
 
   
@@ -54,8 +53,14 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
-    outputs:
-      job-status: ${{ job.status }}
+    
+    - name: Create Job Badge
+      if: ${{ always() }}
+      uses: ./.github/actions/create-job-status-badge
+      with:
+        secret: ${{ secrets.GIST_SECRET }}
+        gist-id: bc8a699b455bced4a1aef138ad5df07e
+        file-name: nb-docker-build-ppml.json
 
   
   docker-build-kms:
@@ -64,8 +69,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    outputs:
-      job-status: ${{ job.status }}
+    
+    - name: Create Job Badge
+      if: ${{ always() }}
+      uses: ./.github/actions/create-job-status-badge
+      with:
+        secret: ${{ secrets.GIST_SECRET }}
+        gist-id: 966d4c0bf23c67662120d1bf4b1c88dc
+        file-name: nb-docker-build-kms.json
 
 
 
@@ -81,15 +92,12 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: '3.7'
-    outputs:
-      job-status: ${{ job.status }}
+    - name: Create Job Badge
+      if: ${{ always() }}
+      uses: ./.github/actions/create-job-status-badge
+      with:
+        secret: ${{ secrets.GIST_SECRET }}
+        gist-id: 6d878630c0c8f50c388bb7e196354ca8
+        file-name: nb-python-sourceforge-build.json
+
       
-  check-job-statuses: 
-    runs-on: ubuntu-latest
-#     needs: [scala-build, docker-build-bigdl, docker-build-ppml, docker-build-kms, python-build-sourceforge]
-    steps:
-    - name: check status
-      run: |
-        if [["${{ needs.scala-build.outputs.job-status }}" == "Success" && "${{ needs.docker-build-bigdl.outputs.job.status }} == "Success"]]; then
-        echo success!!!!!!!!!!!
-        fi
