@@ -14,9 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    
-    - name: Set up JDK8
-      uses: ./.github/actions/jdk-setup-action
       
     - name: Create Job Badge
       uses: ./.github/actions/create-job-status-badge
@@ -84,10 +81,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Set up JDK8
-      uses: ./.github/actions/jdk-setup-action
-    - name: Set up maven
-      uses: ./.github/actions/maven-setup-action
     - name: Set up Python 
       uses: actions/setup-python@v2
       with:
