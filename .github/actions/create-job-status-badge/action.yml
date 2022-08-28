@@ -10,29 +10,51 @@ inputs:
   file-name:
     description: 'gist file name(.json)'
     required: true
+  type:
+    description: 'workflow or job'
+    required: true
+  job-name:
+    description: 'job name"
+    required: true
 runs:
   using: "composite"
   steps:
     - name: print time
       shell: bash
       run: |
-        export NOW=$( date '+%F_%H:%M:%S' )
-        echo "TIME=${NOW}" >> $GITHUB_ENV
+        if [ ${{ inputs.type }} == "workflow" ]
+        then
+          export NOW=$( date '+%F_%H:%M:%S' )
+          echo "TIME=${NOW}" >> $GITHUB_ENV
+        fi
         
     - name: get job status
       shell: bash
       run: |
-        echo "JOB-STATUS=${{ job.status }}" >>$GITHUB_ENV
-    - name: set badge color
-      shell: bash
-      run: if [ ${{ env.JOB-STATUS }} == "success" ] ; then echo "COLOR=green" >> $GITHUB_ENV ; else echo "COLOR=red" >> $GITHUB_ENV; fi
+        if [ ${{ inputs.type }} == "job" ]
+        then
+          echo "JOB-STATUS=${{ job.status }}" >>$GITHUB_ENV
+          if [ ${{ env.JOB-STATUS }} == "success" ] ; then echo "COLOR=green" >> $GITHUB_ENV ; else echo "COLOR=red" >> $GITHUB_ENV; fi
+        fi
     
-    - name: Create the Badge
+    - name: Create job badge
+      if: ${{ github.event.inputs == 'job' }}
       uses: schneegans/dynamic-badges-action@v1.4.0
       with:
         auth: ${{ inputs.secret }}
         gistID: ${{ inputs.gist-id }}
         filename: ${{ inputs.file-name }}
-        label: Time is ${{ env.TIME }}
+        label: ${{ inputs.job-name }}
         message: ${{ env.JOB-STATUS }}
         color: ${{ env.COLOR }}
+        
+     - name: Create time badge
+      if: ${{ github.event.inputs == 'workflow' }}
+      uses: schneegans/dynamic-badges-action@v1.4.0
+      with:
+        auth: ${{ inputs.secret }}
+        gistID: ${{ inputs.gist-id }}
+        filename: ${{ inputs.file-name }}
+        label: Time is
+        message: ${{ env.TIME }}
+    
