@@ -40,12 +40,12 @@ runs:
         color: ${{ env.COLOR }}
         
      - name: Create time badge
-      if: ${{ github.event.inputs == 'workflow' }}
-      uses: schneegans/dynamic-badges-action@v1.4.0
-      with:
-        auth: ${{ inputs.secret }}
-        gistID: ${{ inputs.gist-id }}
-        filename: ${{ inputs.file-name }}
-        label: Time is
-        message: ${{ env.TIME }}
+       if: ${{ github.event.inputs == 'workflow' }}
+       uses: schneegans/dynamic-badges-action@v1.4.0
+       with:
+         auth: ${{ inputs.secret }}
+         gistID: ${{ inputs.gist-id }}
+         filename: ${{ inputs.file-name }}
+         label: Time is
+         message: ${{ env.TIME }}
     
