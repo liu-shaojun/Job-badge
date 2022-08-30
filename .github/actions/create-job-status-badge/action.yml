@@ -21,7 +21,7 @@ runs:
     - name: print time
       shell: bash
       run: |
-        export NOW=$( date '+%F_%H:%M:%S' )
+        export NOW=$( date )
         echo "TIME=${NOW}" >> $GITHUB_ENV
         
     - name: get job status
