@@ -30,7 +30,6 @@ runs:
         if [ ${{ env.JOB-STATUS }} == "success" ] ; then echo "COLOR=green" >> $GITHUB_ENV ; else echo "COLOR=red" >> $GITHUB_ENV; fi
     
     - name: Create job badge
-      if: ${{ github.event.inputs == 'job' }}
       uses: schneegans/dynamic-badges-action@v1.4.0
       with:
         auth: ${{ inputs.secret }}
