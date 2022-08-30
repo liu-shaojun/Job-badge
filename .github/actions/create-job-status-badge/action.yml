@@ -15,7 +15,6 @@ inputs:
     required: true
   job-name:
     description: 'job name"
-    required: true
 runs:
   using: "composite"
   steps:
