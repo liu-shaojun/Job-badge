@@ -21,19 +21,19 @@ runs:
     - name: print time
       shell: bash
       run: |
-        if [[ ${{ inputs.type }} == "workflow" ]]
+        if [ ${{ inputs.type }} == "workflow" ]
         then
-        export NOW=$( date '+%F_%H:%M:%S' )
-        echo "TIME=${NOW}" >> $GITHUB_ENV
+          export NOW=$( date '+%F_%H:%M:%S' )
+          echo "TIME=${NOW}" >> $GITHUB_ENV
         fi
         
     - name: get job status
       shell: bash
       run: |
-        if [[ ${{ inputs.type }} == "job" ]]
-        then
-        echo "JOB-STATUS=${{ job.status }}" >>$GITHUB_ENV
-        if [ ${{ env.JOB-STATUS }} == "success" ] ; then echo "COLOR=green" >> $GITHUB_ENV ; else echo "COLOR=red" >> $GITHUB_ENV; fi
+        if [ ${{ inputs.type }} == "job" ]
+          then
+          echo "JOB-STATUS=${{ job.status }}" >>$GITHUB_ENV
+          if [ ${{ env.JOB-STATUS }} == "success" ] ; then echo "COLOR=green" >> $GITHUB_ENV ; else echo "COLOR=red" >> $GITHUB_ENV; fi
         fi
     
     - name: Create job badge
